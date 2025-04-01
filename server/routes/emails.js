@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/inMemoryDB');
+const emailService = require('../utils/emailService');
+const fs = require('fs');
+const path = require('path');
 
 // Get all emails
 router.get('/', (req, res) => {
@@ -23,21 +26,63 @@ router.get('/:id', (req, res) => {
   res.json(email);
 });
 
-// Create new email
-router.post('/', (req, res) => {
-  const newEmail = {
-    id: db.emails.length + 1,
-    to: req.body.to,
-    subject: req.body.subject,
-    body: req.body.body,
-    date: new Date().toISOString().replace('T', ' ').substring(0, 16),
-    status: 'Sent',
-    relatedTo: req.body.relatedTo,
-    relatedId: parseInt(req.body.relatedId)
-  };
-  
-  db.emails.push(newEmail);
-  res.status(201).json(newEmail);
+// Send a new email
+router.post('/send', async (req, res) => {
+  try {
+    const { to, subject, body, relatedTo, relatedId, template, templateData } = req.body;
+    
+    let htmlContent = body;
+    
+    // If template is provided, use it
+    if (template) {
+      // Example of using a template
+      const templatePath = path.join(__dirname, '../templates', `${template}.html`);
+      
+      if (fs.existsSync(templatePath)) {
+        let templateContent = fs.readFileSync(templatePath, 'utf8');
+        
+        // Replace template variables with actual data
+        if (templateData) {
+          Object.keys(templateData).forEach(key => {
+            templateContent = templateContent.replace(new RegExp(`{{${key}}}`, 'g'), templateData[key]);
+          });
+        }
+        
+        htmlContent = templateContent;
+      }
+    }
+    
+    // Send the email
+    const result = await emailService.sendEmail(
+      to,
+      subject,
+      body, // Plain text version
+      htmlContent // HTML version
+    );
+    
+    if (result.success) {
+      // Log the email in the database
+      const newEmail = {
+        id: db.emails.length + 1,
+        to: to,
+        subject: subject,
+        body: body,
+        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        status: 'Sent',
+        relatedTo: relatedTo,
+        relatedId: parseInt(relatedId),
+        messageId: result.messageId
+      };
+      
+      db.emails.push(newEmail);
+      res.status(201).json(newEmail);
+    } else {
+      res.status(500).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Delete email
