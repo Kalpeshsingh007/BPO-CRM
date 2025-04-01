@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM - Customers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar p-0">
+        <div class="d-flex flex-column p-3">
+          <a href="/dashboard" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-4">CodePro Tech Jalna</span>
+          </a>
+          <hr>
+          <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+              <a href="/dashboard" class="nav-link text-white">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="/customers" class="nav-link active">
+                <i class="bi bi-people me-2"></i>Customers
+              </a>
+            </li>
+            <li>
+              <a href="/leads" class="nav-link text-white">
+                <i class="bi bi-person-plus me-2"></i>Leads
+              </a>
+            </li>
+            <li>
+              <a href="/tasks" class="nav-link text-white">
+                <i class="bi bi-list-check me-2"></i>Tasks
+              </a>
+            </li>
+            <li>
+              <a href="/reports" class="nav-link text-white">
+                <i class="bi bi-bar-chart me-2"></i>Reports
+              </a>
+            </li>
+          </ul>
+          <hr>
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://via.placeholder.com/32" alt="User" width="32" height="32" class="rounded-circle me-2">
+              <strong>Admin</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/">Sign out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="col-md-10 ms-sm-auto main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Customers</h1>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+            <i class="bi bi-plus-circle me-1"></i> Add Customer
+          </button>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="row mb-3">
+          <div class="col-md-8">
+            <div class="input-group">
+              <input type="text" class="form-control" id="searchCustomer" placeholder="Search customers...">
+              <button class="btn btn-outline-secondary" type="button">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <select class="form-select" id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="New">New</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Customers Table -->
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Contact Person</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Last Contact</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTable">
+                  <!-- Customers will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addCustomerForm">
+            <div class="mb-3">
+              <label for="customerName" class="form-label">Company Name</label>
+              <input type="text" class="form-control" id="customerName" required>
+            </div>
+            <div class="mb-3">
+              <label for="contactPerson" class="form-label">Contact Person</label>
+              <input type="text" class="form-control" id="contactPerson" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="customerEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerPhone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="customerPhone" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerStatus" class="form-label">Status</label>
+              <select class="form-select" id="customerStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="New" selected>New</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="saveCustomerBtn">Save Customer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Customer Modal -->
+  <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editCustomerForm">
+            <input type="hidden" id="editCustomerId">
+            <div class="mb-3">
+              <label for="editCustomerName" class="form-label">Company Name</label>
+              <input type="text" class="form-control" id="editCustomerName" required>
+            </div>
+            <div class="mb-3">
+              <label for="editContactPerson" class="form-label">Contact Person</label>
+              <input type="text" class="form-control" id="editContactPerson" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCustomerEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="editCustomerEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCustomerPhone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="editCustomerPhone" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCustomerStatus" class="form-label">Status</label>
+              <select class="form-select" id="editCustomerStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="New">New</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="updateCustomerBtn">Update Customer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Load customers
+    function loadCustomers() {
+      fetch('/api/customers')
+        .then(response => response.json())
+        .then(data => {
+          const customersTable = document.getElementById('customersTable');
+          customersTable.innerHTML = '';
+          
+          data.forEach(customer => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${customer.name}</td>
+              <td>${customer.contact}</td>
+              <td>${customer.email}</td>
+              <td>${customer.phone}</td>
+              <td><span class="status-badge status-${customer.status.toLowerCase()}">${customer.status}</span></td>
+              <td>${customer.lastContact}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary edit-customer" data-id="${customer.id}">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger delete-customer" data-id="${customer.id}">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            `;
+            customersTable.appendChild(row);
+          });
+          
+          // Add event listeners for edit buttons
+          document.querySelectorAll('.edit-customer').forEach(button => {
+            button.addEventListener('click', function() {
+              const customerId = this.getAttribute('data-id');
+              editCustomer(customerId);
+            });
+          });
+          
+          // Add event listeners for delete buttons
+          document.querySelectorAll('.delete-customer').forEach(button => {
+            button.addEventListener('click', function() {
+              const customerId = this.getAttribute('data-id');
+              deleteCustomer(customerId);
+            });
+          });
+        });
+    }
+    
+    // Edit customer
+    function editCustomer(id) {
+      fetch(`/api/customers/${id}`)
+        .then(response => response.json())
+        .then(customer => {
+          document.getElementById('editCustomerId').value = customer.id;
+          document.getElementById('editCustomerName').value = customer.name;
+          document.getElementById('editContactPerson').value = customer.contact;
+          document.getElementById('editCustomerEmail').value = customer.email;
+          document.getElementById('editCustomerPhone').value = customer.phone;
+          document.getElementById('editCustomerStatus').value = customer.status;
+          
+          // Show the modal
+          const editModal = new bootstrap.Modal(document.getElementById('editCustomerModal'));
+          editModal.show();
+        });
+    }
+    
+    // Delete customer
+    function deleteCustomer(id) {
+      if (confirm('Are you sure you want to delete this customer?')) {
+        fetch(`/api/customers/${id}`, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(() => {
+            loadCustomers();
+          });
+      }
+    }
+    
+    // Document ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load customers on page load
+      loadCustomers();
+      
+      // Add new customer
+      document.getElementById('saveCustomerBtn').addEventListener('click', function() {
+        const customerData = {
+          name: document.getElementById('customerName').value,
+          contact: document.getElementById('contactPerson').value,
+          email: document.getElementById('customerEmail').value,
+          phone: document.getElementById('customerPhone').value,
+          status: document.getElementById('customerStatus').value
+        };
+        
+        fetch('/api/customers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(customerData)
+        })
+          .then(response => response.json())
+          .then(() => {
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCustomerModal'));
+            modal.hide();
+            
+            // Clear the form
+            document.getElementById('addCustomerForm').reset();
+            
+            // Reload customers
+            loadCustomers();
+          });
+      });
+      
+      // Update customer
+      document.getElementById('updateCustomerBtn').addEventListener('click', function() {
+        const customerId = document.getElementById('editCustomerId').value;
+        const customerData = {
+          name: document.getElementById('editCustomerName').value,
+          contact: document.getElementById('editContactPerson').value,
+          email: document.getElementById('editCustomerEmail').value,
+          phone: document.getElementById('editCustomerPhone').value,
+          status: document.getElementById('editCustomerStatus').value
+        };
+        
+        fetch(`/api/customers/${customerId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(customerData)
+        })
+          .then(response => response.json())
+          .then(() => {
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editCustomerModal'));
+            modal.hide();
+            
+            // Reload customers
+            loadCustomers();
+          });
+      });
+    });
+  </script>
+</body>
+</html>

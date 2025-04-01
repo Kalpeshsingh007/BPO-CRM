@@ -1,0 +1,117 @@
+/* Main styling */
+:root {
+    --primary: #3498db;
+    --secondary: #2c3e50;
+    --success: #2ecc71;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+  }
+  
+  .sidebar {
+    min-height: 100vh;
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 5px;
+  }
+  
+  .sidebar .nav-link:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .sidebar .nav-link.active {
+    color: white;
+    background-color: var(--primary);
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    font-weight: 500;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .table th {
+    border-top: none;
+    background-color: #f8f9fa;
+  }
+  
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .status-active {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .status-new {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+  
+  .status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .status-completed {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+  
+  /* Dashboard styling */
+  .dashboard-card {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .dashboard-card .number {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+  
+  .dashboard-card .label {
+    color: var(--secondary);
+    font-weight: 500;
+  }
+  
+  /* Form styling */
+  .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+  }
