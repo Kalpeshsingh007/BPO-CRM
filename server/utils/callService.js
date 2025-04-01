@@ -1,38 +1,25 @@
-const twilio = require('twilio');
+// server/utils/callService.js
+// MOCK VERSION - No real Twilio functionality
 
-// Initialize Twilio client
-const accountSid = 'YOUR_TWILIO_ACCOUNT_SID'; // Replace with your Twilio SID
-const authToken = 'YOUR_TWILIO_AUTH_TOKEN'; // Replace with your Twilio token
-const twilioPhoneNumber = 'YOUR_TWILIO_PHONE_NUMBER'; // Replace with your Twilio phone number
-
-const client = twilio(accountSid, authToken);
-
-// Function to make an outbound call
-async function makeCall(to, url, from = twilioPhoneNumber) {
-  try {
-    const call = await client.calls.create({
-      to: to,
-      from: from,
-      url: url // A URL to TwiML instructions for the call
-    });
-    
-    return {
-      success: true,
-      callSid: call.sid
-    };
-  } catch (error) {
-    console.error('Error making call:', error);
-    return {
-      success: false,
-      error: error.message
-    };
-  }
+// Function to make an outbound call (mocked)
+async function makeCall(to, url, from = '+18106418555') {
+  console.log(`[MOCK] Would call ${to} from ${from} with URL: ${url}`);
+  
+  // Return a successful mock response
+  return {
+    success: true,
+    callSid: 'MOCK_CALL_' + Math.random().toString(36).substring(2, 10),
+    message: 'This is a mock call. No actual call was made.'
+  };
 }
 
 // Function to generate TwiML for a call
 function generateCallTwiML(options) {
   const { message, voiceName = 'alice', record = false, timeout = 20 } = options;
   
+  console.log(`[MOCK] Generated TwiML with message: ${message}`);
+  
+  // Just return the TwiML without actually using it
   let twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="${voiceName}">${message}</Say>`;
@@ -48,21 +35,22 @@ function generateCallTwiML(options) {
   return twiml;
 }
 
-// Function to retrieve call details
+// Function to retrieve call details (mocked)
 async function getCallDetails(callSid) {
-  try {
-    const call = await client.calls(callSid).fetch();
-    return {
-      success: true,
-      callDetails: call
-    };
-  } catch (error) {
-    console.error('Error retrieving call details:', error);
-    return {
-      success: false,
-      error: error.message
-    };
-  }
+  console.log(`[MOCK] Would get details for call: ${callSid}`);
+  
+  // Return mock call details
+  return {
+    success: true,
+    callDetails: {
+      status: 'completed',
+      duration: '120',
+      from: '+18106418555',
+      to: 'DESTINATION_NUMBER',
+      direction: 'outbound-api',
+      sid: callSid
+    }
+  };
 }
 
 module.exports = {
